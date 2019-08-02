@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Tasks
+            </h1>
+            <p class="subtitle">
+                Demo site: using <strong>PropertyAccess</strong> in Symfony forms.
+            </p>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <table class="table is-striped table is-fullwidth">
+                <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Label</td>
+                    <td>Due Date</td>
+                    <td>Configuration</td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Test</td>
+                    <td>2019-01-23</td>
+                    <td>{}</td>
+                    <td>
+                        <a class="button is-primary"><i class="fas fa-edit"></i>  Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <article class="tile is-child notification is-primary">
+                <p class="title">Blog Post: .</p>
+                <p class="subtitle">Lorem ipsum</p>
+            </article>
+        </div>
+    </section>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Task
@@ -25,16 +27,29 @@ class Task
     /**
      * @var string|null
      *
-     * @ORM\Column(name="task", type="string", length=255, nullable=true)
+     * @ORM\Column(name="task", type="string", length=255, nullable=false)
+     *
+     * @Assert\NotBlank
      */
     protected $task;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="due_date", type="time", nullable=true)
+     * @ORM\Column(name="due_date", type="datetime", nullable=false)
+     *
+     * @Assert\NotBlank
+     * @Assert\Type("\DateTime")
      */
     protected $dueDate;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=true)
+     *
+     */
+    protected $created;
 
     /**
      * @var array|null
@@ -42,6 +57,19 @@ class Task
      * @ORM\Column(name="config", type="json", nullable=true)
      */
     protected $configuration;
+
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+    }
+
+    /**
+     * @return \Ramsey\Uuid\UuidInterface
+     */
+    public function getId(): \Ramsey\Uuid\UuidInterface
+    {
+        return $this->id;
+    }
 
     public function getTask()
     {
@@ -63,15 +91,26 @@ class Task
         $this->dueDate = $dueDate;
     }
 
-    public function setConfig(?array $config = null)
+    public function setConfiguration($configuration = null)
     {
-        $this->configuration = $config;
+        if ($configuration instanceof self) {
+            $configuration = $configuration->getConfiguration();
+        }
+
+        $this->configuration = $configuration;
 
         return $this;
     }
 
-    public function getConfig(): array
+    public function getConfiguration(): array
     {
         return $this->configuration ?: [];
+    }
+
+    public function getConfigurationParameter(string $parameter)
+    {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        return $propertyAccessor->getValue($this->configuration, $parameter);
     }
 }

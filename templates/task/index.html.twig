@@ -3,46 +3,38 @@
 {% block body %}
     <section class="section">
         <div class="container">
-            <h1 class="title">
-                Tasks
-            </h1>
-            <p class="subtitle">
-                Demo site: using <strong>PropertyAccess</strong> in Symfony forms.
-            </p>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
             <table class="table is-striped table is-fullwidth">
                 <thead>
                 <tr>
-                    <td>#</td>
                     <td>Label</td>
-                    <td>Due Date</td>
-                    <td>Configuration</td>
+                    <td>Configuration (Property Access)</td>
+                    <td>Configuration (Raw)</td>
                     <td></td>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Test</td>
-                    <td>2019-01-23</td>
-                    <td>{}</td>
-                    <td>
-                        <a class="button is-primary"><i class="fas fa-edit"></i>  Edit</a>
-                    </td>
-                </tr>
+                {% for task in tasks %}
+                    <tr title="{{ task.id }}">
+                        <td>
+                            <p>{{ task.task }}</p>
+                            <p><span class="tag">Due: {{ task.dueDate|date }}</span></p>
+                        </td>
+                        <td>
+                            <p>Parameter1: <span class="tag">{{ attribute(task, 'configurationParameter', ['[parameter1]']) ?: 'not set' }}</span></p>
+                            <p>Parameter2: <span class="tag">{{ attribute(task, 'configurationParameter', ['[parameter2]']) ?: 'not set' }}</span></p>
+                            <p>Parameter3 (first child): <span class="tag">{{ attribute(task, 'configurationParameter', ['[parameter3][firstchild]']) ?: 'not set' }}</span></p>
+                            <p>Parameter3 (second child): <span class="tag">{{ attribute(task, 'configurationParameter', ['[parameter3][secondchild]']) ?: 'not set' }}</span></p>
+                        </td>
+                        <td>
+                            <pre>{{ task.configuration|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                        </td>
+                        <td>
+                            <a class="button is-secondary" href="{{ path('task_edit_get', {'id': task.id}) }}">Edit</a>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <article class="tile is-child notification is-primary">
-                <p class="title">Blog Post: .</p>
-                <p class="subtitle">Lorem ipsum</p>
-            </article>
         </div>
     </section>
 {% endblock %}

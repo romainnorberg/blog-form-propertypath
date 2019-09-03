@@ -109,6 +109,10 @@ class Task
 
     public function getConfigurationParameter(string $parameter)
     {
+        if (null === $this->configuration) {
+            return null;
+        }
+
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         return $propertyAccessor->getValue($this->configuration, $parameter);
